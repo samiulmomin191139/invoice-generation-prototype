@@ -1,0 +1,100 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Business {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  email     String?
+  phone     String?
+  website   String?
+  logoUrl   String?
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  invoices  Invoice[]
+}
+
+model Client {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  email     String?
+  phone     String?
+  website   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  invoices  Invoice[]
+}
+
+model Invoice {
+  id              String   @id @default(uuid())
+  invoiceNo       String   @unique
+  invoiceDate     DateTime
+  dueDate         DateTime?
+  status          String   @default("draft")
+  currency        String   @default("GBP")
+  currencySymbol  String   @default("£")
+  subtotal        Float    @default(0)
+  taxRate         Float?
+  taxAmount       Float    @default(0)
+  discount        Float    @default(0)
+  discountType    String?
+  additionalCharges Float  @default(0)
+  total           Float    @default(0)
+  amountPaid      Float    @default(0)
+  notes           String?
+  terms           String?
+  signature       String?
+  showTotalInWords Boolean @default(true)
+  businessId      String
+  clientId        String
+  business        Business @relation(fields: [businessId], references: [id])
+  client          Client   @relation(fields: [clientId], references: [id])
+  items           InvoiceItem[]
+  customFields    CustomField[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model InvoiceItem {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  quantity    Float   @default(1)
+  rate        Float   @default(0)
+  amount      Float   @default(0)
+  unit        String?
+  sortOrder   Int     @default(0)
+  invoiceId   String
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+model CustomField {
+  id        String  @id @default(uuid())
+  label     String
+  value     String
+  invoiceId String
+  invoice   Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+model Settings {
+  id                    String  @id @default(uuid())
+  defaultCurrency       String  @default("GBP")
+  defaultCurrencySymbol String  @default("£")
+  invoicePrefix         String  @default("A")
+  nextInvoiceNumber     Int     @default(1)
+  defaultTaxRate        Float?
+  defaultNotes          String?
+  defaultTerms          String?
+  contactEmail          String?
+  contactPhone          String?
+  contactMessage        String  @default("For any enquiry, reach out via email at")
+}
