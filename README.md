@@ -19,6 +19,62 @@ npx prisma db seed
 npm run dev
 ```
 
+## Project Directory Structure
+
+invoice-generator/
+├── prisma/
+│   └── schema.prisma
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── businesses/
+│   │   │   │   └── route.ts
+│   │   │   ├── clients/
+│   │   │   │   └── route.ts
+│   │   │   ├── invoices/
+│   │   │   │   ├── route.ts
+│   │   │   │   └── [id]/
+│   │   │   │       ├── route.ts
+│   │   │   │       └── pdf/
+│   │   │   │           └── route.ts
+│   │   │   └── settings/
+│   │   │       └── route.ts
+│   │   ├── invoices/
+│   │   │   ├── page.tsx
+│   │   │   ├── new/
+│   │   │   │   └── page.tsx
+│   │   │   └── [id]/
+│   │   │       ├── page.tsx
+│   │   │       └── edit/
+│   │   │           └── page.tsx
+│   │   ├── clients/
+│   │   │   └── page.tsx
+│   │   ├── settings/
+│   │   │   └── page.tsx
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   └── globals.css
+│   ├── components/
+│   │   ├── InvoiceForm.tsx
+│   │   ├── InvoicePreview.tsx
+│   │   ├── InvoicePDF.tsx
+│   │   ├── Sidebar.tsx
+│   │   ├── Header.tsx
+│   │   ├── ClientModal.tsx
+│   │   ├── BusinessModal.tsx
+│   │   └── NumberToWords.ts
+│   └── lib/
+│       ├── prisma.ts
+│       ├── currencies.ts
+│       └── utils.ts
+├── public/
+│   └── logos/
+├── package.json
+├── tsconfig.json
+├── tailwind.config.ts
+├── next.config.js
+└── .env
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
